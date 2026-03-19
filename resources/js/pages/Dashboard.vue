@@ -45,9 +45,14 @@ onMounted(async () => {
                     </a>
                 </div>
 
-                <!-- Placeholder 1 -->
-                <div class="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-                    <PlaceholderPattern />
+                <!-- eee blogi card -->
+                <div
+                    class="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border cursor-pointer hover:shadow-lg transition-transform transform hover:scale-105"
+                >
+                    <a href="/blogs" class="flex h-full w-full flex-col items-center justify-center gap-2 bg-green-50 dark:bg-green-900 text-gray-900 dark:text-white">
+                        <span class="text-4xl">📝</span>
+                        <span class="text-lg font-semibold">Blog</span>
+                    </a>
                 </div>
 
                 <!-- Placeholder 2 -->
