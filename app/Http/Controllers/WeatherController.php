@@ -8,12 +8,12 @@ use Illuminate\Support\Facades\Cache;
 
 class WeatherController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $city = $request->input('city') ?: 'Tallinn';
+        $city = $request->input('city', 'Tallinn');
 
         $weather = Cache::remember("weather_$city", 600, function () use ($city) {
-            return Http::get(env('WEATHER_BASE_URL') . 'weather', [
+            return Http::get('https://api.openweathermap.org/data/2.5/weather', [
                 'q' => $city,
                 'appid' => env('WEATHER_API_KEY'),
                 'units' => 'metric'
@@ -27,10 +27,10 @@ class WeatherController extends Controller
 
     public function search(Request $request)
     {
-        $city = $request->input('city');
+        $city = $request->input('city', 'Tallinn');
 
         $weather = Cache::remember("weather_$city", 600, function () use ($city) {
-            return Http::get(env('WEATHER_BASE_URL') . 'weather', [
+            return Http::get('https://api.openweathermap.org/data/2.5/weather', [
                 'q' => $city,
                 'appid' => env('WEATHER_API_KEY'),
                 'units' => 'metric'

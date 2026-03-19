@@ -1,19 +1,26 @@
 <script setup>
+import { ref, onMounted } from 'vue';
 import { Head } from '@inertiajs/vue3';
-import PlaceholderPattern from '@/components/PlaceholderPattern.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
+import PlaceholderPattern from '@/components/PlaceholderPattern.vue';
 import Map from '@/pages/Map.vue';
+import axios from 'axios';
 
-const props = defineProps({
-    markers: Array
-});
+const markers = ref([]); // will store markers from backend
 
 const breadcrumbs = [
-    {
-        title: 'Dashboard',
-        href: '/dashboard',
-    },
+    { title: 'Dashboard', href: '/dashboard' },
 ];
+
+// Load markers from backend
+onMounted(async () => {
+    try {
+        const res = await axios.get('/map/markers');
+        markers.value = res.data;
+    } catch (err) {
+        console.error('Failed to load markers', err);
+    }
+});
 </script>
 
 <template>
@@ -22,10 +29,10 @@ const breadcrumbs = [
     <AppLayout :breadcrumbs="breadcrumbs">
         <div class="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
 
-            <!-- Ülemine grid kaardid -->
+            <!-- Top grid cards -->
             <div class="grid auto-rows-min gap-4 md:grid-cols-3">
 
-                <!-- Weather kaart -->
+                <!-- Weather card -->
                 <div
                     class="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border cursor-pointer hover:shadow-lg transition-transform transform hover:scale-105"
                 >
@@ -47,10 +54,11 @@ const breadcrumbs = [
                 <div class="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
                     <PlaceholderPattern />
                 </div>
+
             </div>
 
-            <!-- Alumine suur kaart → Map -->
-            <div class="relative min-h-[80vh] flex-1 rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border overflow-hidden">
+            <!-- Map Section -->
+            <div class="relative min-h-[80vh] flex-1 rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border overflow-hidden mt-4">
                 <Map :markers="markers" />
             </div>
 
