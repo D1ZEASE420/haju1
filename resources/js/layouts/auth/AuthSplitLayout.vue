@@ -13,34 +13,41 @@ defineProps<{
 </script>
 
 <template>
-    <div
-        class="relative grid h-dvh flex-col items-center justify-center px-8 sm:px-0 lg:max-w-none lg:grid-cols-2 lg:px-0"
-    >
-        <div
-            class="relative hidden h-full flex-col bg-muted p-10 text-white lg:flex dark:border-r"
-        >
-            <div class="absolute inset-0 bg-zinc-900" />
-            <Link
-                :href="home()"
-                class="relative z-20 flex items-center text-lg font-medium"
-            >
-                <AppLogoIcon class="mr-2 size-8 fill-current text-white" />
-                {{ name }}
-            </Link>
-        </div>
-        <div class="lg:p-8">
-            <div
-                class="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]"
-            >
-                <div class="flex flex-col space-y-2 text-center">
-                    <h1 class="text-xl font-medium tracking-tight" v-if="title">
-                        {{ title }}
-                    </h1>
-                    <p class="text-sm text-muted-foreground" v-if="description">
-                        {{ description }}
-                    </p>
+    <div class="relative min-h-dvh grid lg:grid-cols-2">
+
+        <!-- Left panel -->
+        <div class="relative hidden lg:flex flex-col bg-[#0a0c10] p-12 overflow-hidden">
+            <div class="pointer-events-none absolute inset-0">
+                <div class="absolute -top-20 -left-20 h-[400px] w-[400px] rounded-full bg-blue-600/15 blur-[100px]"></div>
+                <div class="absolute bottom-0 right-0 h-[300px] w-[300px] rounded-full bg-indigo-500/10 blur-[80px]"></div>
+                <div class="absolute inset-0" style="background-image: radial-gradient(circle, rgba(255,255,255,0.02) 1px, transparent 1px); background-size: 32px 32px;"></div>
+            </div>
+            <Link :href="home()" class="relative z-10 flex items-center gap-2.5">
+                <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-500/20 border border-blue-500/30">
+                    <AppLogoIcon class="size-4 fill-current text-blue-400" />
                 </div>
-                <slot />
+                <span class="font-semibold text-white/90 text-sm">{{ name }}</span>
+            </Link>
+            <div class="relative z-10 mt-auto">
+                <blockquote class="text-white/60 text-sm font-light leading-relaxed max-w-xs">
+                    "A clean, modern dashboard for weather, maps, and blogging."
+                </blockquote>
+            </div>
+        </div>
+
+        <!-- Right panel -->
+        <div class="relative flex flex-col items-center justify-center px-6 py-12 bg-background">
+            <div class="pointer-events-none absolute inset-0 overflow-hidden">
+                <div class="absolute top-0 right-0 h-[400px] w-[400px] rounded-full bg-primary/4 blur-[100px]"></div>
+            </div>
+            <div class="relative w-full max-w-sm">
+                <div class="text-center mb-8">
+                    <h1 class="text-2xl font-semibold tracking-tight text-foreground" v-if="title">{{ title }}</h1>
+                    <p class="text-sm text-muted-foreground mt-2" v-if="description">{{ description }}</p>
+                </div>
+                <div class="rounded-2xl border border-border bg-card shadow-sm p-8">
+                    <slot />
+                </div>
             </div>
         </div>
     </div>

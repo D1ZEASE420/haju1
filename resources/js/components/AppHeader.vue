@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Link, usePage } from '@inertiajs/vue3';
-import { BookOpen, Folder, LayoutGrid, Menu, Search } from 'lucide-vue-next';
+import { BookOpen, Cloud, Folder, LayoutGrid, Menu, Newspaper, Search } from 'lucide-vue-next';
 import { computed } from 'vue';
 import AppLogo from '@/components/AppLogo.vue';
 import AppLogoIcon from '@/components/AppLogoIcon.vue';
@@ -54,6 +54,16 @@ const activeItemStyles =
     'text-neutral-900 dark:bg-neutral-800 dark:text-neutral-100';
 
 const mainNavItems: NavItem[] = [
+    {
+        title: 'Weather',
+        href: '/weather/search?city=tallinn',
+        icon: Cloud,
+    },
+    {
+        title: 'Blog',
+        href: '/blogs',
+        icon: Newspaper,
+    },
     {
         title: 'Dashboard',
         href: dashboard(),
