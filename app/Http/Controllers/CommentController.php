@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 class CommentController extends Controller
 {
     /**
-     * Store a new comment on a blog post.
+     * Store a new comment.
      * Any authenticated user may comment.
      */
     public function store(Request $request, Blog $blog)
@@ -28,21 +28,40 @@ class CommentController extends Controller
     }
 
     /**
+     * Update a comment.
+     * Only the comment author may edit their own comment.
+     */
+    public function update(Request $request, Comment $comment)
+    {
+        $user = Auth::user();
+
+        abort_if($comment->user_id !== $user->id, 403, 'Saad muuta ainult oma kommentaare.');
+
+        $data = $request->validate([
+            'content' => 'required|string|max:1000',
+        ]);
+
+        $comment->update(['content' => $data['content']]);
+
+        return redirect()->back();
+    }
+
+    /**
      * Delete a comment.
-     * Allowed if:
-     *   - the current user is the comment author, OR
-     *   - the current user is an admin (BlogController::isAdmin), OR
-     *   - the current user is the owner of the blog post the comment belongs to.
+     * Allowed for:
+     *   - admin (can delete any comment)
+     *   - blog post owner (can moderate comments on their post)
+     *   - comment author (can delete their own comment)
      */
     public function destroy(Comment $comment)
     {
         $user = Auth::user();
 
-        $isAdmin       = BlogController::isAdmin($user);
-        $isAuthor      = $comment->user_id === $user->id;
-        $isBlogOwner   = $comment->blog && $comment->blog->user_id === $user->id;
+        $isAdmin     = $user->isAdmin();
+        $isAuthor    = $comment->user_id === $user->id;
+        $isBlogOwner = $comment->blog && $comment->blog->user_id === $user->id;
 
-        abort_if(!$isAdmin && !$isAuthor && !$isBlogOwner, 403, 'This action is not authorised.');
+        abort_if(! $isAdmin && ! $isAuthor && ! $isBlogOwner, 403, 'Puudub õigus.');
 
         $comment->delete();
 
