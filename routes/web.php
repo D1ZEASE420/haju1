@@ -9,6 +9,7 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ShopController;
+use App\Http\Controllers\AlbumController;
 
 // ------------------------------------------------------------------
 // Pood (avalik — vaatamine ei nõua sisselogimist)
@@ -50,18 +51,21 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::inertia('dashboard', 'Dashboard')->name('dashboard');
 
     // Marker management
-    Route::get('/map/markers',               [MarkerController::class, 'index']);
-    Route::post('/map/marker',               [MarkerController::class, 'store']);
-    Route::patch('/map/marker/{marker}',     [MarkerController::class, 'update']);
-    Route::delete('/map/marker/{marker}',    [MarkerController::class, 'destroy']);
+    Route::get('/map/markers',            [MarkerController::class, 'index']);
+    Route::post('/map/marker',            [MarkerController::class, 'store']);
+    Route::patch('/map/marker/{marker}',  [MarkerController::class, 'update']);
+    Route::delete('/map/marker/{marker}', [MarkerController::class, 'destroy']);
 
     // Blog CRUD
     Route::resource('blogs', BlogController::class);
 
     // Comments
-    Route::post('blogs/{blog}/comments',  [CommentController::class, 'store'])->name('blogs.comments.store');
-    Route::patch('comments/{comment}',    [CommentController::class, 'update'])->name('comments.update');
-    Route::delete('comments/{comment}',   [CommentController::class, 'destroy'])->name('comments.destroy');
+    Route::post('blogs/{blog}/comments', [CommentController::class, 'store'])->name('blogs.comments.store');
+    Route::patch('comments/{comment}',   [CommentController::class, 'update'])->name('comments.update');
+    Route::delete('comments/{comment}',  [CommentController::class, 'destroy'])->name('comments.destroy');
+
+    // Music albums
+    Route::resource('music', AlbumController::class)->only(['index', 'create', 'store', 'edit', 'update', 'destroy']);
 });
 
 // ------------------------------------------------------------------
