@@ -15,7 +15,7 @@ class WeatherController extends Controller
         $weather = Cache::remember("weather_$city", 600, function () use ($city) {
             return Http::get('https://api.openweathermap.org/data/2.5/weather', [
                 'q' => $city,
-                'appid' => env('WEATHER_API_KEY'),
+                'appid' => env('OPENWEATHER_API_KEY'),
                 'units' => 'metric'
             ])->json();
         });
@@ -32,7 +32,7 @@ class WeatherController extends Controller
         $weather = Cache::remember("weather_$city", 600, function () use ($city) {
             return Http::get('https://api.openweathermap.org/data/2.5/weather', [
                 'q' => $city,
-                'appid' => env('WEATHER_API_KEY'),
+                'appid' => env('OPENWEATHER_API_KEY'),
                 'units' => 'metric'
             ])->json();
         });

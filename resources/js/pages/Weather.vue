@@ -1,8 +1,9 @@
 <script setup>
 import { ref } from 'vue'
-import { router } from '@inertiajs/vue3'
+import { router, usePage } from '@inertiajs/vue3'
 
 const city = ref('')
+const page = usePage() // access $page props
 
 const search = () => {
     if (!city.value) return
@@ -15,6 +16,7 @@ const search = () => {
 
     <h1 class="text-3xl font-bold mb-6">🌤 Weather</h1>
 
+    <!-- Search form -->
     <div class="flex gap-2 mb-4">
       <input 
         v-model="city" 
@@ -29,34 +31,37 @@ const search = () => {
       </button>
     </div>
 
-    <div v-if="$page.props.error" class="text-red-500 mb-4">
-      {{ $page.props.error }}
+    <!-- Error message -->
+    <div v-if="page.props.weather && page.props.weather.cod !== 200" class="text-red-500 mb-4">
+      {{ page.props.weather.message }}
     </div>
 
-    <div v-if="$page.props.weather?.main" class="mt-4 p-6 bg-white dark:bg-gray-800 rounded-2xl shadow-lg text-center w-full max-w-md">
+    <!-- Weather info -->
+    <div v-if="page.props.weather && page.props.weather.cod === 200" class="mt-4 p-6 bg-white dark:bg-gray-800 rounded-2xl shadow-lg text-center w-full max-w-md">
 
       <h2 class="text-2xl font-semibold mb-2">
-        {{ $page.props.weather?.name }}
+        {{ page.props.weather.name }}
       </h2>
 
       <p class="text-4xl font-bold mb-2">
-        {{ Math.round($page.props.weather?.main?.temp) }}°C
+        {{ Math.round(page.props.weather.main.temp) }}°C
       </p>
 
       <p class="capitalize mb-4">
-        {{ $page.props.weather?.weather?.[0]?.description }}
+        {{ page.props.weather.weather[0].description }}
       </p>
 
       <img 
-        :src="`http://openweathermap.org/img/wn/${$page.props.weather?.weather?.[0]?.icon}@2x.png`" 
+        :src="`http://openweathermap.org/img/wn/${page.props.weather.weather[0].icon}@2x.png`" 
         class="mx-auto"
       />
 
       <div class="flex justify-center gap-4 mt-4 text-gray-600 dark:text-gray-300">
-        <p>Humidity: {{ $page.props.weather?.main?.humidity }}%</p>
-        <p>Wind: {{ $page.props.weather?.wind?.speed }} m/s</p>
+        <p>Humidity: {{ page.props.weather.main.humidity }}%</p>
+        <p>Wind: {{ page.props.weather.wind.speed }} m/s</p>
       </div>
 
     </div>
+
   </div>
 </template>
