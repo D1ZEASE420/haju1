@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Settings\ApiTokenController;
 use App\Http\Controllers\Settings\ProfileController;
 use App\Http\Controllers\Settings\SecurityController;
 use Illuminate\Support\Facades\Route;
@@ -21,4 +22,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('user-password.update');
 
     Route::inertia('settings/appearance', 'settings/Appearance')->name('appearance.edit');
+
+    // API Token
+    Route::post('settings/api-token',   [ApiTokenController::class, 'generate'])->name('api-token.generate');
+    Route::delete('settings/api-token', [ApiTokenController::class, 'revoke'])->name('api-token.revoke');
 });

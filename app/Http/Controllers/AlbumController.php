@@ -34,9 +34,11 @@ class AlbumController extends Controller
         $genres = Album::distinct()->orderBy('genre')->pluck('genre');
 
         return Inertia::render('Music/Index', [
-            'albums'  => $albums,
-            'genres'  => $genres,
-            'filters' => $request->only(['search', 'genre', 'rating', 'sort', 'dir']),
+            'albums'   => $albums,
+            'genres'   => $genres,
+            'filters'  => $request->only(['search', 'genre', 'rating', 'sort', 'dir']),
+            'hasToken' => ! is_null(Auth::user()?->api_token),
+            'newToken' => session('newToken'),
         ]);
     }
 
