@@ -86,16 +86,17 @@ function starColor(r) {
                     <p class="text-muted-foreground text-sm mt-0.5">{{ albums.length }} albumit</p>
                 </div>
                 <div class="flex items-center gap-2">
-                    <Link
+                    <a
                         href="/api/albums"
                         target="_blank"
+                        rel="noopener noreferrer"
                         class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-border bg-card text-xs font-medium text-muted-foreground hover:text-foreground hover:border-primary/30 transition-all"
                     >
                         <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>
                         </svg>
                         JSON API
-                    </Link>
+                    </a>
                     <Link
                         href="/music/create"
                         class="inline-flex items-center gap-2 px-4 py-2.5 bg-primary text-primary-foreground rounded-xl text-sm font-medium hover:bg-primary/90 active:scale-95 transition-all shadow-sm shadow-primary/20"

@@ -37,6 +37,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/orders/{order}/confirmation', [OrderController::class, 'confirmation'])->name('orders.confirmation');
 });
 
+// Admin: product management (requires auth + admin check in controller)
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/shop/products/create',         [ShopController::class, 'create'])->name('shop.products.create');
+    Route::post('/shop/products',               [ShopController::class, 'storeProduct'])->name('shop.products.store');
+    Route::get('/shop/products/{product}/edit', [ShopController::class, 'editProduct'])->name('shop.products.edit');
+    Route::put('/shop/products/{product}',      [ShopController::class, 'updateProduct'])->name('shop.products.update');
+    Route::delete('/shop/products/{product}',   [ShopController::class, 'destroyProduct'])->name('shop.products.destroy');
+});
+ 
+
 // ------------------------------------------------------------------
 // Stripe Webhook (välja arvata CSRF-kaitsest — vt bootstrap/app.php)
 // ------------------------------------------------------------------

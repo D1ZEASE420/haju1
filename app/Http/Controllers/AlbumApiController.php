@@ -43,20 +43,19 @@ class AlbumApiController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        $search  = $request->string('search')->trim()->toString();
-        $genre   = $request->string('genre')->trim()->toString();
-        $rating  = $request->integer('rating');
-        $year    = $request->integer('year');
-        $sort    = in_array($request->sort, ['title', 'artist', 'release_year', 'rating', 'created_at'])
+        $search = $request->string('search')->trim()->toString();
+        $genre  = $request->string('genre')->trim()->toString();
+        $rating = $request->integer('rating');
+        $year   = $request->integer('year');
+        $sort   = in_array($request->sort, ['title', 'artist', 'release_year', 'rating', 'created_at'])
                     ? $request->sort : 'created_at';
-        $dir     = $request->dir === 'asc' ? 'asc' : 'desc';
-        $limit   = min((int) ($request->limit ?: 20), 100);
+        $dir    = $request->dir === 'asc' ? 'asc' : 'desc';
+        $limit  = min((int) ($request->limit ?: 20), 100);
 
-        // Build a unique cache key from all query params
         $cacheKey = 'api_albums_' . md5(serialize(compact('search', 'genre', 'rating', 'year', 'sort', 'dir', 'limit')));
 
-        $result = Cache::remember($cacheKey, 120, function () use ($search, $genre, $rating, $year, $sort, $dir, $limit) {
-            $query = Album::with('user:id,name')
+        $data = Cache::remember($cacheKey, 120, function () use ($search, $genre, $rating, $year, $sort, $dir, $limit) {
+            return Album::with('user:id,name')
                 ->when($search, fn ($q) =>
                     $q->where(fn ($q2) =>
                         $q2->where('title', 'like', "%{$search}%")
@@ -68,18 +67,16 @@ class AlbumApiController extends Controller
                 ->when($year,   fn ($q) => $q->where('release_year', $year))
                 ->orderBy($sort, $dir)
                 ->limit($limit)
-                ->get();
-
-            return $query;
+                ->get()
+                ->toArray(); // convert to plain array before caching
         });
 
         return response()->json([
-            'data'  => $result,
-            'meta'  => [
-                'count'   => $result->count(),
+            'data' => $data,
+            'meta' => [
+                'count'   => count($data),
                 'limit'   => $limit,
                 'filters' => compact('search', 'genre', 'rating', 'year', 'sort', 'dir'),
-                'cached'  => true,
             ],
         ]);
     }
@@ -90,7 +87,7 @@ class AlbumApiController extends Controller
     public function show(int $id): JsonResponse
     {
         $album = Cache::remember("api_album_{$id}", 300, fn () =>
-            Album::with('user:id,name')->findOrFail($id)
+            Album::with('user:id,name')->findOrFail($id)->toArray()
         );
 
         return response()->json(['data' => $album]);
@@ -102,7 +99,7 @@ class AlbumApiController extends Controller
     public function genres(): JsonResponse
     {
         $genres = Cache::remember('api_albums_genres', 300, fn () =>
-            Album::distinct()->orderBy('genre')->pluck('genre')
+            Album::distinct()->orderBy('genre')->pluck('genre')->toArray()
         );
 
         return response()->json(['data' => $genres]);
@@ -114,11 +111,11 @@ class AlbumApiController extends Controller
     public function stats(): JsonResponse
     {
         $stats = Cache::remember('api_albums_stats', 120, fn () => [
-            'total'        => Album::count(),
-            'avg_rating'   => round(Album::avg('rating'), 2),
-            'earliest_year'=> Album::min('release_year'),
-            'latest_year'  => Album::max('release_year'),
-            'genres'       => Album::distinct()->count('genre'),
+            'total'         => Album::count(),
+            'avg_rating'    => round(Album::avg('rating'), 2),
+            'earliest_year' => Album::min('release_year'),
+            'latest_year'   => Album::max('release_year'),
+            'genres'        => Album::distinct()->count('genre'),
         ]);
 
         return response()->json(['data' => $stats]);

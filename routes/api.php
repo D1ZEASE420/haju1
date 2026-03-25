@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\AlbumApiController;
+use Illuminate\Support\Facades\Route;
+
 
 Route::prefix('albums')->name('api.albums.')->group(function () {
     Route::get('/',            [AlbumApiController::class, 'index'])->name('index');
