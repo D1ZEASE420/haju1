@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3';
-import { BookOpen, Cloud, FolderGit2, LayoutGrid, Music, Newspaper, ShoppingBag } from 'lucide-vue-next';
+import { BookOpen, Clapperboard, Cloud, FolderGit2, LayoutGrid, Music, Newspaper, ShoppingBag } from 'lucide-vue-next';
 import AppLogo from '@/components/AppLogo.vue';
 import NavFooter from '@/components/NavFooter.vue';
 import NavMain from '@/components/NavMain.vue';
@@ -23,6 +23,7 @@ const mainNavItems: NavItem[] = [
     { title: 'Blog', href: '/blogs', icon: Newspaper },
     { title: 'Pood', href: '/shop', icon: ShoppingBag },
     { title: 'Muusika', href: '/music', icon: Music },
+    { title: 'Filmid', href: '/movies', icon: Clapperboard },
 ];
 
 const footerNavItems: NavItem[] = [

@@ -10,6 +10,9 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\AlbumController;
+use App\Http\Controllers\MoviesController;
+
+Route::get('/movies', [MoviesController::class, 'index'])->name('movies.index');
 
 // ------------------------------------------------------------------
 // Pood (avalik — vaatamine ei nõua sisselogimist)

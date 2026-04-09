@@ -27,7 +27,7 @@ onMounted(async () => {
         <div class="flex h-full flex-1 flex-col gap-5 p-5 overflow-x-auto">
 
             <!-- Quick Access Cards -->
-            <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+            <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
 
                 <!-- Weather Card -->
                 <Link
@@ -105,6 +105,26 @@ onMounted(async () => {
                         <div>
                             <h3 class="font-semibold text-foreground">Muusika</h3>
                             <p class="text-sm text-muted-foreground mt-0.5">Lemmikalbumid</p>
+                        </div>
+                    </div>
+                </Link>
+
+                <!-- Movies Card -->
+                <Link
+                    href="/movies"
+                    class="group relative overflow-hidden rounded-2xl border border-border bg-card p-6 transition-all duration-300 hover:shadow-lg hover:shadow-primary/10 hover:-translate-y-0.5 hover:border-primary/30"
+                >
+                    <div class="absolute inset-0 bg-gradient-to-br from-red-500/8 to-rose-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div class="relative flex flex-col gap-3">
+                        <div class="flex items-center justify-between">
+                            <span class="flex h-11 w-11 items-center justify-center rounded-xl bg-red-500/12 text-2xl border border-red-500/20">🎬</span>
+                            <svg class="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-foreground">Filmid</h3>
+                            <p class="text-sm text-muted-foreground mt-0.5">Väline API</p>
                         </div>
                     </div>
                 </Link>
