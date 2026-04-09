@@ -82,12 +82,13 @@ function getRating(movie) {
 const availableSortFields = computed(() => {
     if (!props.movies?.length) return [];
     const m = props.movies[0];
+    if (!m || typeof m !== 'object') return [];
     const fields = [];
-    if ('title' in m)        fields.push({ key: 'title',        label: 'Pealkiri' });
-    if (getYear(m))          fields.push({ key: 'year',         label: 'Aasta' });
-    if (getRating(m))        fields.push({ key: 'rating',       label: 'Hinnang' });
-    if (getGenre(m))         fields.push({ key: 'genre',        label: 'Žanr' });
-    if (getDirector(m))      fields.push({ key: 'director',     label: 'Režissöör' });
+    if ('title' in m)                         fields.push({ key: 'title',    label: 'Pealkiri' });
+    if (getYear(m) !== null)                  fields.push({ key: 'year',     label: 'Aasta' });
+    if (getRating(m) !== null)                fields.push({ key: 'rating',   label: 'Hinnang' });
+    if (getGenre(m) !== null)                 fields.push({ key: 'genre',    label: 'Žanr' });
+    if (getDirector(m) !== null)              fields.push({ key: 'director', label: 'Režissöör' });
     return fields;
 });
 
@@ -264,15 +265,15 @@ const breadcrumbs = [
 
                             <!-- Extra fields — show any remaining data -->
                             <div class="pt-2 border-t border-border mt-auto space-y-1">
-                                <div
-                                    v-for="(value, key) in movie"
-                                    :key="key"
-                                    v-if="!['id','title','description','poster','image','image_url','thumbnail','cover','photo','genre','category','type','director','directed_by','filmmaker','year','release_year','released','release_date','rating','score','imdb_rating','created_at','updated_at'].includes(String(key)) && value"
-                                    class="flex items-baseline gap-2 text-xs"
-                                >
-                                    <span class="text-muted-foreground capitalize shrink-0">{{ String(key).replace(/_/g, ' ') }}:</span>
-                                    <span class="text-foreground truncate">{{ value }}</span>
-                                </div>
+                                <template v-for="(value, key) in movie" :key="key">
+                                    <div
+                                        v-if="!['id','title','description','poster','image','image_url','thumbnail','cover','photo','genre','category','type','director','directed_by','filmmaker','year','release_year','released','release_date','rating','score','imdb_rating','created_at','updated_at'].includes(String(key)) && value && typeof value !== 'object'"
+                                        class="flex items-baseline gap-2 text-xs"
+                                    >
+                                        <span class="text-muted-foreground capitalize shrink-0">{{ String(key).replace(/_/g, ' ') }}:</span>
+                                        <span class="text-foreground truncate">{{ value }}</span>
+                                    </div>
+                                </template>
                             </div>
                         </div>
                     </div>
